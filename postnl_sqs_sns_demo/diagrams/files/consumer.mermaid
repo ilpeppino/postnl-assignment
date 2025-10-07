@@ -1,0 +1,25 @@
+sequenceDiagram
+  autonumber
+  participant Cons as Consumer
+  participant CF as CloudFront (Self-service UI)
+  participant APIGW as API Gateway
+  participant Auth as Cognito (JWT)
+  participant CA as Lambda consumer_admin
+  participant DSubs as DynamoDB postnl-eb-subscriptions
+  participant EBCore as EventBridge postnl-core-bus
+  participant SNS as Amazon SNS (consumer topic)
+
+  Cons->>CF: Open portal & authenticate
+  CF->>APIGW: POST /registerConsumer (JWT, {team, source, detailType, schemaVersion, protocol=SNS})
+  APIGW->>Auth: Validate JWT
+  Auth-->>APIGW: OK
+  APIGW->>CA: Invoke consumer_admin with body
+
+  CA->>SNS: CreateTopic postnl-<team>-<detailType>
+  CA->>EBCore: PutRule
+  Note over CA,EBCore: Use bus postnl-core-bus\nEvent pattern matches: source + detail-type + detail.schemaVersion
+  CA->>EBCore: PutTargets (target = SNS topic)
+  CA->>DSubs: PutItem TEAM#<team>, SRC#<source>#DT#<detailType>#V#<schemaVersion>
+  CA-->>APIGW: 200 {status: created, topicArn, ruleArn}
+  APIGW-->>CF: Success JSON
+  CF-->>Cons: Show SNS topic ARN & subscription instructions

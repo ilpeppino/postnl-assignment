@@ -1,0 +1,33 @@
+sequenceDiagram
+  autonumber
+  participant Prod as Producer
+  participant CF as CloudFront (Self-service UI)
+  participant APIGW as API Gateway
+  participant Auth as Cognito (JWT)
+  participant BA as Lambda broker_admin
+  participant DS as DynamoDB postnl-eb-schemas
+  participant DC as DynamoDB postnl-eb-catalog
+  participant SQS as Amazon SQS postnl-ingress-<producer>
+  participant DLQ as Amazon SQS postnl-ingress-<producer>-dlq
+
+  Prod->>CF: Open portal and authenticate
+  CF->>APIGW: POST /registerProducer
+  Note over CF,APIGW: Body includes producer, eventType, version, schemaJson, ingress = SQS
+  APIGW->>Auth: Validate JWT
+  Auth-->>APIGW: OK
+  APIGW->>BA: Invoke broker_admin with body
+
+  BA->>DS: PutItem schema record
+  BA->>DC: PutItem catalog record
+
+  alt DLQ enabled for ingress queue
+    BA->>DLQ: CreateQueue DLQ
+  end
+
+  BA->>SQS: CreateQueue producer queue
+  BA->>SQS: Set attributes for encryption and redrive policy
+  Note over BA,SQS: Attributes include SSE, visibility timeout, retention, redrive to DLQ when configured
+
+  BA-->>APIGW: Return registered with queueUrl and queueArn
+  APIGW-->>CF: Success JSON
+  CF-->>Prod: Show SQS queue URL and IAM snippet

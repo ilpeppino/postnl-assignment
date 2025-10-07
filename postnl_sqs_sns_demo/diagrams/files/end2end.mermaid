@@ -1,0 +1,29 @@
+sequenceDiagram
+  autonumber
+  participant SQSProd as SQS postnl-ingress-<producer>
+  participant IF as Lambda sqs_ingress_forwarder
+  participant EBIng as EventBridge postnl-ingress-bus
+  participant RV as Lambda runtime_event_validator
+  participant DS as DynamoDB postnl-eb-schemas
+  participant EBCore as EventBridge postnl-core-bus
+  participant Rule as EB Rule consumer subscription
+  participant SNS as Amazon SNS consumer topic
+  participant Sub as Consumer Subscriber
+  participant DLQ as SQS postnl-runtime-dlq
+
+  SQSProd-->>IF: Trigger with message
+  IF->>EBIng: PutEvents to ingress bus
+  EBIng-->>RV: Rule triggers validator
+  RV->>DS: GetItem schema by producer_event and version
+
+  alt Schema valid and payload valid
+    RV->>EBCore: PutEvents to core bus
+    EBCore-->>Rule: Event matches consumer rule
+    Rule->>SNS: Deliver event to topic
+    SNS-->>Sub: Notify subscriber
+  else Invalid schema or payload
+    RV->>DLQ: Send rejected event to DLQ
+  end
+
+  Note over RV,DS: Validator checks required fields and simple types against postnl-eb-schemas
+  Note over EBCore,Rule: Rule pattern matches source, detail-type and detail.schemaVersion

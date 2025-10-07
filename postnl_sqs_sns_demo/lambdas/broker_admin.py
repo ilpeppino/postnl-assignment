@@ -46,6 +46,9 @@ def handler(event, context):
         "EventBridge": "arn:aws:events:REGION:ACCOUNT_ID:event-bus/postnl-ingress-bus"
     }.get(ingress, "n/a")
 
+    # IMPORTANT NOTE:
+    # We should create the actual SQS/DLQ queue, SNS topic, or EventBridge bus here but skipping for demo
+
     return {"statusCode": 200, "body": json.dumps({
         "status": "registered",
         "producer": producer,
