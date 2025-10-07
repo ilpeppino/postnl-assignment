@@ -1,0 +1,44 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EbManageRulesTargets",
+      "Effect": "Allow",
+      "Action": [
+        "events:PutRule",
+        "events:PutTargets",
+        "events:DescribeRule",
+        "events:RemoveTargets",
+        "events:DeleteRule"
+      ],
+      "Resource": "arn:aws:events:REGION:ACCOUNT_ID:rule/*"
+    },
+    {
+      "Sid": "EbListOptional",
+      "Effect": "Allow",
+      "Action": [
+        "events:ListRules",
+        "events:ListEventBuses"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "SnsCreateTopic",
+      "Effect": "Allow",
+      "Action": [
+        "sns:CreateTopic",
+        "sns:GetTopicAttributes",
+        "sns:SetTopicAttributes"
+      ],
+      "Resource": "arn:aws:sns:REGION:ACCOUNT_ID:*"
+    },
+    {
+      "Sid": "DdbWriteSubscription",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:PutItem"
+      ],
+      "Resource": "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/postnl-eb-subscriptions"
+    }
+  ]
+}

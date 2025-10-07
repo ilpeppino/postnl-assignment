@@ -1,0 +1,8 @@
+{
+  "body": {
+    "team": "team-ops",
+    "source": "nl.postnl.parcels",
+    "detailType": "parcel.created",
+    "schemaVersion": "1"
+  }
+}

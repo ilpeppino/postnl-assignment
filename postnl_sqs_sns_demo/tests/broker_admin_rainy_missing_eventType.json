@@ -1,0 +1,15 @@
+{
+  "body": {
+    "producer": "nl.postnl.parcels",
+    "version": "1",
+    "schemaJson": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "ingressType": "SQS"
+  }
+}

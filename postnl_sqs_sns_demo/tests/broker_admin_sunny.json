@@ -1,0 +1,27 @@
+{
+  "body": {
+    "producer": "nl.postnl.parcels",
+    "eventType": "parcel.created",
+    "version": "1",
+    "schemaJson": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string"
+        },
+        "parcelId": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "parcelId",
+        "weight"
+      ]
+    },
+    "ingressType": "SQS"
+  }
+}

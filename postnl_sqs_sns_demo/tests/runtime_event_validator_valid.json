@@ -1,0 +1,9 @@
+{
+  "source": "nl.postnl.parcels",
+  "detail-type": "parcel.created",
+  "detail": {
+    "schemaVersion": "1",
+    "parcelId": "p-001",
+    "weight": 1.5
+  }
+}
