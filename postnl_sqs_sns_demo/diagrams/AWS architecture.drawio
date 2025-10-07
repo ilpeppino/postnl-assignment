@@ -1,0 +1,146 @@
+<mxfile host="app.diagrams.net" modified="2025-10-07T12:30:00.000Z" agent="chatgpt" version="22.0.0">
+  <diagram name="PostNL Event Broker Architecture (Embedded Icons)">
+    <mxGraphModel dx="1920" dy="1080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ===== Utility: embedded SVG badges as images (by color) =====
+             We use a simple rounded rectangle "badge" with a colored fill.
+             Labels are set via mxCell 'value' and shown below the image.
+        -->
+        <!-- Colors -->
+        <!-- Purple: CloudFront/APIGW | Pink: Cognito | Orange: Lambda | Blue: DynamoDB | Red: EventBridge -->
+        <!-- Yellow-Orange: SQS/SNS | Green: CloudWatch | Teal: Grafana | Gray: CI/CD -->
+
+        <!-- Pre-encoded SVG badge templates -->
+        <!-- Purple badge -->
+        <mxCell id="img_purple" value="" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%239B59B6' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;" vertex="0" parent="1"/>
+        <!-- Pink badge -->
+        <mxCell id="img_pink" value="" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%23E879F9' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;" vertex="0" parent="1"/>
+        <!-- Orange badge -->
+        <mxCell id="img_orange" value="" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%23F59E0B' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;" vertex="0" parent="1"/>
+        <!-- Blue badge -->
+        <mxCell id="img_blue" value="" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%231B76D3' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;" vertex="0" parent="1"/>
+        <!-- Red badge -->
+        <mxCell id="img_red" value="" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%23EF4444' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;" vertex="0" parent="1"/>
+        <!-- Yellow badge (for SNS/SQS) -->
+        <mxCell id="img_yellow" value="" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%23FBBF24' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;" vertex="0" parent="1"/>
+        <!-- Green badge -->
+        <mxCell id="img_green" value="" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%2310B981' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;" vertex="0" parent="1"/>
+        <!-- Teal badge -->
+        <mxCell id="img_teal" value="" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%230EA5E9' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;" vertex="0" parent="1"/>
+        <!-- Gray badge -->
+        <mxCell id="img_gray" value="" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%239CA3AF' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;" vertex="0" parent="1"/>
+
+        <!-- ===== Nodes (horizontal layout) ===== -->
+        <!-- Top layer: Self-service / Control plane -->
+        <mxCell id="n_user" value="Producers&#10;(SQS/SNS/HTTPS/EventBridge)" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' x='1' y='1' width='138' height='88' fill='%231E90FF' stroke='%23111827' stroke-width='2'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_cf" value="CloudFront&#10;(Portal)" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%239B59B6'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="120" width="140" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_cog" value="Cognito&#10;(Auth)" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%23E879F9'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="120" width="140" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_apigw" value="API Gateway" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%239B59B6'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="120" width="140" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_ba" value="Lambda&#10;broker_admin" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%23F59E0B'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="120" width="140" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_ca" value="Lambda&#10;consumer_admin" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%23F59E0B'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="230" width="140" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_schemas" value="DynamoDB&#10;postnl-eb-schemas" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%231B76D3'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="60" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_catalog" value="DynamoDB&#10;postnl-eb-catalog" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%231B76D3'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="140" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_subs" value="DynamoDB&#10;postnl-eb-subscriptions" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%231B76D3'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="220" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Middle layer: Runtime / Data plane -->
+        <mxCell id="n_sqs_prod" value="SQS&#10;postnl-ingress-&lt;producer&gt;" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%23FBBF24'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="380" width="140" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_eb_ing" value="EventBridge&#10;postnl-ingress-bus" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%23EF4444'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="380" width="140" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_rv" value="Lambda&#10;runtime_event_validator" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%23F59E0B'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="380" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_eb_core" value="EventBridge&#10;postnl-core-bus" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%23EF4444'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="380" width="140" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_sns_cons" value="SNS&#10;Consumer Topics" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%23FBBF24'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="380" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_dlq" value="SQS&#10;postnl-runtime-dlq" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%239CA3AF'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="490" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Bottom layer: CI/CD & Observability -->
+        <mxCell id="n_cicd" value="CI/CD&#10;GitLab / CodePipeline" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%239CA3AF'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="650" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_cw" value="CloudWatch&#10;(Logs &amp; Alarms)" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%2310B981'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="650" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n_graf" value="Grafana&#10;(Monitoring)" style="shape=image;image=data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='90'%3E%3Crect rx='12' ry='12' width='140' height='90' fill='%230EA5E9'/%3E%3C/svg%3E;imageAlign=center;verticalAlign=middle;labelPosition=center;verticalLabelPosition=bottom;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="650" width="160" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="n_legend" value="Legend&#10;Blue dotted: Registration (Control Plane)&#10;Green solid: Runtime (Data Plane)&#10;Red dashed: DLQ / Monitoring" style="rounded=1;fillColor=#F3F4F6;strokeColor=#9CA3AF;html=1;align=left;verticalAlign=top;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="650" width="360" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Edges (flows) ===== -->
+        <!-- Registration / Control plane (blue, dotted) -->
+        <mxCell id="e_reg_1" edge="1" parent="1" source="n_user" target="n_cf" style="endArrow=block;html=1;strokeColor=#1E90FF;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_reg_2" edge="1" parent="1" source="n_cf" target="n_cog" style="endArrow=block;html=1;strokeColor=#1E90FF;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_reg_3" edge="1" parent="1" source="n_cog" target="n_apigw" style="endArrow=block;html=1;strokeColor=#1E90FF;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_reg_4" edge="1" parent="1" source="n_apigw" target="n_ba" style="endArrow=block;html=1;strokeColor=#1E90FF;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_reg_5" edge="1" parent="1" source="n_apigw" target="n_ca" style="endArrow=block;html=1;strokeColor=#1E90FF;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_reg_6" edge="1" parent="1" source="n_ba" target="n_schemas" style="endArrow=block;html=1;strokeColor=#1E90FF;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_reg_7" edge="1" parent="1" source="n_ba" target="n_catalog" style="endArrow=block;html=1;strokeColor=#1E90FF;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_reg_8" edge="1" parent="1" source="n_ca" target="n_subs" style="endArrow=block;html=1;strokeColor=#1E90FF;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Runtime / Data plane (green, solid) -->
+        <mxCell id="e_run_1" edge="1" parent="1" source="n_sqs_prod" target="n_eb_ing" style="endArrow=block;html=1;strokeColor=#10B981;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_run_2" edge="1" parent="1" source="n_eb_ing" target="n_rv" style="endArrow=block;html=1;strokeColor=#10B981;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_run_3" edge="1" parent="1" source="n_rv" target="n_eb_core" style="endArrow=block;html=1;strokeColor=#10B981;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_run_4" edge="1" parent="1" source="n_eb_core" target="n_sns_cons" style="endArrow=block;html=1;strokeColor=#10B981;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- DLQ / Monitoring (red, dashed) -->
+        <mxCell id="e_err_1" edge="1" parent="1" source="n_rv" target="n_dlq" style="endArrow=block;html=1;strokeColor=#DC2626;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_err_2" edge="1" parent="1" source="n_dlq" target="n_cw" style="endArrow=block;html=1;strokeColor=#DC2626;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_err_3" edge="1" parent="1" source="n_cw" target="n_graf" style="endArrow=block;html=1;strokeColor=#DC2626;dashed=1;dashPattern=8 8;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Optional: CI/CD links (gray, solid) -->
+        <mxCell id="e_ci_1" edge="1" parent="1" source="n_cicd" target="n_ba" style="endArrow=block;html=1;strokeColor=#9CA3AF;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_ci_2" edge="1" parent="1" source="n_cicd" target="n_rv" style="endArrow=block;html=1;strokeColor=#9CA3AF;rounded=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
