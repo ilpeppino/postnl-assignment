@@ -19,13 +19,32 @@ SQS Producer → EventBridge Ingress Bus → Validator Lambda → EventBridge Co
 ---
 
 ## 🚀 2️⃣ Run Lambdas in Order
-| # | Lambda | Input | Expected Output |
-|---|---------|--------|----------------|
-| 1 | **event_schema_validator** | `tests/broker_admin_sunny.json` (schema only) | ✅ 200 + `"schema_valid"` → DynamoDB entry |
-| 2 | **broker_admin** | `tests/broker_admin_sunny.json` | ✅ 200 + `"registered"` → `schemas` & `catalog` tables updated |
-| 3 | **consumer_admin** | `tests/consumer_admin_sunny_sns.json` | ✅ 200 + `"created"` → SNS topic + EventBridge rule |
-| 4 | **sqs_ingress_forwarder** | `tests/sqs_ingress_forwarder_sunny.json` | ✅ 200 + `"forwarded":1` → Event in `postnl-ingress-bus` |
-| 5 | **runtime_event_validator** | `tests/runtime_event_validator_valid.json` | ✅ 200 + `"accepted"` → Event → Core Bus → SNS → email received |
+| # | Lambda | Description | Input | Expected Output |
+|---|--------| ----------- |------ | ---------------|
+| 1 | **event_schema_validator** | Validates the **JSON Schema** submitted by a producer before registration. Ensures the schema is syntactically correct and follows PostNL rules. | `broker_admin_sunny.json` (schema block only) | `tests/broker_admin_sunny.json` (schema only) | ✅ 200 + `"schema_valid"` → DynamoDB entry |
+| 2 | **broker_admin** | Handles **producer registration**: validates schema, stores producer metadata, creates catalog entry, and sets default permissions. | `tests/broker_admin_sunny.json` | ✅ 200 + `"registered"` → `schemas` & `catalog` tables updated |
+| 3 | **consumer_admin** | Handles **consumer registration**: records subscriptions, creates EventBridge rules and SNS topics, enabling consumers to receive chosen events. | `tests/consumer_admin_sunny_sns.json` | ✅ 200 + `"created"` → SNS topic + EventBridge rule |
+| 4 | **sqs_ingress_forwarder** | Acts as a **producer ingress point** for SQS producers. Consumes SQS messages and forwards them to the EventBridge Ingress Bus. | `sqs_ingress_forwarder_sunny.json` | `tests/sqs_ingress_forwarder_sunny.json` | ✅ 200 + `"forwarded":1` → Event in `postnl-ingress-bus` |
+| 5 | **runtime_event_validator** | Core **event validation and routing** component. Validates incoming events against the registered schema, sends valid events to the Core Bus, and rejects invalid ones to the DLQ. | `tests/runtime_event_validator_valid.json` | ✅ 200 + `"accepted"` → Event → Core Bus → SNS → email received |
+
+---
+
+## 🧪 Testing (AWS Console)
+
+All tests are run directly from the **AWS Lambda Console** using the provided payloads in `/tests/`.
+
+1. **event_schema_validator** → validate schema only.  
+2. **broker_admin** → register producer with schema.  
+3. **consumer_admin** → register consumer with chosen event type and delivery method.  
+4. **sqs_ingress_forwarder** → simulate producer event via SQS.  
+5. **runtime_event_validator** → validate and forward event to consumer.
+
+### Sunny-Day Scenarios
+✅ Schema valid → Producer registered → Consumer created → Event forwarded → SNS email received.
+
+### Rainy-Day Scenarios
+❌ Schema invalid → 400 error  
+❌ Invalid payload → message sent to DLQ (`postnl-runtime-dlq`)
 
 ---
 
