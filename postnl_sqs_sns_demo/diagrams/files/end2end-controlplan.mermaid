@@ -1,0 +1,42 @@
+sequenceDiagram
+  autonumber
+
+  %% Actors & services
+  participant Prod as Producer
+  participant Cons as Consumer
+  participant CF as CloudFront UI
+  participant GW as API Gateway
+  participant Auth as Cognito
+  participant BA as Lambda broker_admin
+  participant CA as Lambda consumer_admin
+  participant ESV as Lambda event_schema_validator
+  participant Schemas as DDB postnl-eb-schemas
+  participant Catalog as DDB postnl-eb-catalog
+  participant Subs as DDB postnl-eb-subscriptions
+
+  %% Producer registration
+  Prod->>CF: Sign in & open portal
+  CF->>GW: POST /registerProducer (producer,eventType,version,schemaJson,ingress)
+  GW->>Auth: Validate JWT
+  Auth-->>GW: OK
+  GW->>BA: Invoke broker_admin
+  BA->>ESV: Pre-validate schemaJson
+  ESV-->>BA: OK/Err
+  alt Schema OK
+    BA->>Schemas: PutItem schema (producer_event,version,schemaJson)
+    BA->>Catalog: PutItem catalog (pk=producer#, sk=event#)
+    BA-->>GW: Return endpoints + IAM snippets
+    GW-->>CF: Show producer endpoints
+  else Schema Err
+    BA-->>GW: 400 schema invalid
+  end
+
+  %% Consumer registration
+  Cons->>CF: Sign in & open portal
+  CF->>GW: POST /registerConsumer (team,source,detailType,schemaVersion,protocol,targetConfig)
+  GW->>Auth: Validate JWT
+  Auth-->>GW: OK
+  GW->>CA: Invoke consumer_admin
+  CA->>Subs: PutItem subscription (pk=TEAM#, sk=SRC#...#V#...)
+  CA-->>GW: Return egress target (SQS|SNS|HTTPS|EB) + ruleArn
+  GW-->>CF: Show consumer egress target
