@@ -1,8 +1,11 @@
 {
+  "path": "/registerConsumer",
   "body": {
     "team": "team-ops",
     "source": "nl.postnl.parcels",
     "detailType": "parcel.created",
-    "schemaVersion": "1"
+    "schemaVersion": "1",
+    "protocol": "SNS",
+    "targetConfig": { "topicName": "postnl-team-ops-parcel-created" }
   }
 }
